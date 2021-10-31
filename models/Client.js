@@ -2,36 +2,44 @@ const fs = require('fs');
 
 class Client {
 
+
   constructor() {
-    this.error = {
-      error: false,
-      message: undefined,
-    };
+
   }
 
-  setError(message) {
-    this.error = {
-      error: true,
-      message: message,
+  static readFile() {
+    var result;
+    var error;
+    fs.readFile("./models/clientes.json", "utf8", (err, jsonString) => {
+      if (err) {
+        error = 'Error Reading the File.';
+      } else {
+        try {
+          result = JSON.parse(jsonString);
+          console.log(clients);
+        } catch (err) {
+          error = 'Error parsing JSON string.';
+        }
+      }
+    });
+    if (error != undefined) {
+      return error;
+    } else {
+      return result;
     }
   }
 
-  getClients() {
-    fs.readFile("./models/clients.json", "utf8", (err, jsonString) => {
-      if (err) {
-        this.setError('Error Reading the File.')
-        console.log(this.error);
-        return;
-      }
-      try {
-        const clients = JSON.parse(jsonString);
-        console.log(clients.clients)
-      } catch (err) {
-        this.setError('Error parsing JSON string.')
-        console.log(this.error);
-        return
-      }
-    });
+  Error(message) {
+    const error = {
+      message: message,
+    }
+    return error;
   }
+
+  static getClients() {
+    var result = self.readFile();
+    return result;
+  }
+
 }
 module.exports = Client; 
