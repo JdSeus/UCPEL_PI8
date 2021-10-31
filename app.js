@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 
-const routeClientes = require('./routes/clientes');
+const routeClients = require('./routes/clients');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use('/clientes', routeClientes);
+app.use('/clientes', routeClients);
 
 app.use((req, res, next) => {
     const error = new Error('Não encontrado')
