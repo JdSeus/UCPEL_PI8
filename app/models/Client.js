@@ -114,10 +114,9 @@ class Client {
   static putClient(clientObject) {
     return new Promise((resolve, reject) => {
 
-      /*
-      Client.readDocument().then((clientes) => {
+      Client.getClients().then((clients) => {
         var clientExists = false;
-        clientes.forEach(client => {
+        clients.forEach((client) => {
           if (client.id == clientObject.id) {
             clientExists = true;
             client.id = clientObject.id;
@@ -139,15 +138,11 @@ class Client {
           }).catch((error) => {
             return reject(error);
           });
-        } else {
-          var error = new Error('Cliente não encontrado.')
-          error.status = 404;
-          return reject(error)
-        } 
+        }
       }).catch((error) => {
-        return reject(error);
-      }); 
-      */
+        return reject(error)
+      });    
+
     }); 
   }
 
