@@ -138,7 +138,11 @@ class Client {
           }).catch((error) => {
             return reject(error);
           });
-        }
+        } else {
+          var error = new Error('Cliente não encontrado.')
+          error.status = 404;
+          return reject(error)
+        } 
       }).catch((error) => {
         return reject(error)
       });    
