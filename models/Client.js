@@ -2,43 +2,22 @@ const fs = require('fs');
 
 class Client {
 
-
-  constructor() {
-
-  }
-
-  static readFile() {
-    var result;
-    var error;
-    fs.readFile("./models/clientes.json", "utf8", (err, jsonString) => {
-      if (err) {
-        error = 'Error Reading the File.';
-      } else {
+  static readDocument() {
+    return new Promise((resolve, reject) => {
+      try {
+        var content = fs.readFileSync("./models/clientes.json", 'utf8');
         try {
-          result = JSON.parse(jsonString);
-          console.log(clients);
+          var result = JSON.parse(content);
+          return resolve(result);
         } catch (err) {
-          error = 'Error parsing JSON string.';
+          var error = 'Error parsing JSON string.';
+          return reject(error)
         }
+      } catch(err) {
+        var error = 'Error reading the file.';
+        return reject(error)
       }
     });
-    if (error != undefined) {
-      return error;
-    } else {
-      return result;
-    }
-  }
-
-  Error(message) {
-    const error = {
-      message: message,
-    }
-    return error;
-  }
-
-  static getClients() {
-    var result = self.readFile();
-    return result;
   }
 
 }
