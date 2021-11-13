@@ -10,4 +10,7 @@ exports.getClients = (req, res, next) => {
     });    
 };
 
-
+exports.getClient = (req, res, next) => {
+    const id = req.params.id;
+    res.status(200).send("PEGANDO O ID: " + id); 
+};
