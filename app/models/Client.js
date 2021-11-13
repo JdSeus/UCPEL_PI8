@@ -5,7 +5,7 @@ class Client {
   static readDocument() {
     return new Promise((resolve, reject) => {
       try {
-        var content = fs.readFileSync("./models/clientes.json", 'utf8');
+        var content = fs.readFileSync("./app/models/clientes.json", 'utf8');
         try {
           var result = JSON.parse(content);
           return resolve(result);
