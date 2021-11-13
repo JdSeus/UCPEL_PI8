@@ -20,5 +20,15 @@ class Client {
     });
   }
 
+  static getClients() {
+    return new Promise((resolve, reject) => {
+      Client.readDocument().then((result) => {
+        resolve(result);
+      }).catch((error) => {
+        reject(error);
+      }); 
+    }); 
+  }
+
 }
 module.exports = Client; 
