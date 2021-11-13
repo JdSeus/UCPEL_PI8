@@ -10,11 +10,13 @@ class Client {
           var result = JSON.parse(content);
           return resolve(result);
         } catch (err) {
-          var error = 'Error parsing JSON string.';
+          var error = new Error('Erro ao converter texto para JSON.')
+          error.status = 500;
           return reject(error)
         }
       } catch(err) {
-        var error = 'Error reading the file.';
+        var error = new Error('Erro ao ler o arquivo.')
+        error.status = 500;
         return reject(error)
       }
     });
@@ -22,8 +24,25 @@ class Client {
 
   static getClients() {
     return new Promise((resolve, reject) => {
-      Client.readDocument().then((result) => {
-        resolve(result);
+      Client.readDocument().then((clients) => {
+        resolve(clients);
+      }).catch((error) => {
+        reject(error);
+      }); 
+    }); 
+  }
+
+  static getClient(id) {
+    return new Promise((resolve, reject) => {
+      Client.readDocument().then((clientes) => {
+        clientes.forEach(client => {
+          if (client.id == id) {
+            resolve(client);
+          }
+        });
+        var error = new Error('Cliente não encontrado.')
+        error.status = 404;
+        return reject(error)
       }).catch((error) => {
         reject(error);
       }); 
