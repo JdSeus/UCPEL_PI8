@@ -1,5 +1,29 @@
 const Client = require("../models/Client");
 
+function constructNotDefinedFieldsMessage(notDefinedFields) {
+
+    if (notDefinedFields.length != 0) {
+        if (notDefinedFields.length == 1) {
+            var string = `O campo ${notDefinedFields[0]} não está definido!`;
+        } else {
+            var string = "Os campos ";
+            notDefinedFields.forEach(function(value, key, array){
+                if (key < array.length - 2) {
+                    string += `${value}, `
+                } else {
+                    if (key < array.length - 1) {
+                        string += `${value} e `;
+                    } else {
+                        string += `${value} não estão definidos!`;
+                    }
+                }
+            });
+        }
+        return string;
+    }
+    return 'Sem erros.';
+}
+
 exports.getClients = (req, res, next) => {
     Client.getClients().then((clients) => {
         res.status(200).send(clients);
@@ -26,39 +50,6 @@ exports.getClient = (req, res, next) => {
         });
     });   
 };
-
-function sendFieldNotDefined(field) {
-    res.status(422).send({
-        erro: {
-            status: 422,
-            mensagem: "O campo " + field + " não está definido!"
-        }
-    });
-}
-
-function constructNotDefinedFieldsMessage(notDefinedFields) {
-
-    if (notDefinedFields.length != 0) {
-        if (notDefinedFields.length == 1) {
-            var string = `O campo ${notDefinedFields[0]} não está definido!`;
-        } else {
-            var string = "Os campos ";
-            notDefinedFields.forEach(function(value, key, array){
-                if (key < array.length - 2) {
-                    string += `${value}, `
-                } else {
-                    if (key < array.length - 1) {
-                        string += `${value} e `;
-                    } else {
-                        string += `${value} não estão definidos!`;
-                    }
-                }
-            });
-        }
-        return string;
-    }
-    return 'Sem erros.';
-}
 
 exports.postClient = (req, res, next) => {
     var notDefinedFields = [];
@@ -176,3 +167,16 @@ exports.putClient = (req, res, next) => {
     });   
 };
 
+exports.deleteClient = (req, res, next) => {
+    const id = req.params.id;
+    Client.deleteClient(id).then((result) => {
+        res.status(200).send(result);
+    }).catch((error) => {
+        res.status(error.status).send({
+            erro: {
+                status: error.status,
+                mensagem: error.message
+            }
+        });
+    });   
+};

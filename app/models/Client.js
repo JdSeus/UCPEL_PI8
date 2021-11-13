@@ -150,6 +150,51 @@ class Client {
     }); 
   }
 
+  static deleteClient(id) {
+    return new Promise((resolve, reject) => {
+
+      Client.getClients().then((clients) => {
+        var clientExists = false;
+        clients.forEach(client => {
+          if (client.id == id) {
+            if (Object.keys(client).length > 1) {
+              clientExists = true;
+              client.nome = undefined;
+              client.endereco = undefined;
+              client.cep = undefined;
+              client.data_de_nascimento = undefined;
+              client.telefone = undefined;
+            } else {
+              var error = new Error('Cliente não encontrado.')
+              error.status = 404;
+              return reject(error);
+            }
+          }
+        });
+        if (clientExists == true) {
+          var clientsJSON = JSON.stringify(clients);
+          Client.writeDocument(clientsJSON).then(() => {
+            resolve({
+              sucesso: {
+                status: 200,
+                mensagem: "Cliente removido com sucesso!"
+              }
+            }) 
+          }).catch((error) => {
+            return reject(error);
+          });
+        } else {
+          var error = new Error('Cliente não encontrado.')
+          error.status = 404;
+          return reject(error)
+        }
+      }).catch((error) => {
+        return reject(error)
+      }); 
+
+    }); 
+  }
+
 }
 module.exports = Client; 
 
