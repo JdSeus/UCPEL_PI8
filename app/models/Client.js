@@ -4,6 +4,7 @@ class Client {
 
   static readDocument() {
     return new Promise((resolve, reject) => {
+
       try {
         var content = fs.readFileSync("./app/models/clientes.json", 'utf8');
         try {
@@ -19,11 +20,13 @@ class Client {
         error.status = 500;
         return reject(error)
       }
+
     });
   }
 
   static writeDocument(contentJson) {
     return new Promise((resolve, reject) => {
+      
       try {
         fs.writeFileSync('./app/models/clientes.json', contentJson)
         return resolve();
@@ -32,30 +35,34 @@ class Client {
         error.status = 500;
         return reject(error)
       }
+
     });
   }
 
   static getClients() {
     return new Promise((resolve, reject) => {
+
       Client.readDocument().then((clients) => {
-        resolve(clients);
+        return resolve(clients);
       }).catch((error) => {
-        reject(error);
+        return reject(error);
       }); 
+
     }); 
   }
 
   static getClient(id) {
     return new Promise((resolve, reject) => {
-      Client.readDocument().then((clientes) => {
-        clientes.forEach(client => {
+
+      Client.getClients().then((clients) => {
+        clients.forEach(client => {
           if (client.id == id) {
             if (Object.keys(client).length > 1) {
-              resolve(client);
+              return resolve(client);
             } else {
               var error = new Error('Cliente não encontrado.')
               error.status = 404;
-              return reject(error)
+              return reject(error);
             }
           }
         });
@@ -63,14 +70,16 @@ class Client {
         error.status = 404;
         return reject(error)
       }).catch((error) => {
-        reject(error);
+        return reject(error)
       }); 
+
     }); 
   }
 
   static postClient(clientObject) {
     return new Promise((resolve, reject) => {
-      Client.readDocument().then((clients) => {
+
+      Client.getClients().then((clients) => {
         if (clients.length > 0) {
           var lastId = clients[clients.length-1].id;
         } else {
@@ -88,22 +97,60 @@ class Client {
         var clientsJSON = JSON.stringify(clients);
         Client.writeDocument(clientsJSON).then(() => {
           Client.getClient(lastId+1).then((client) => {
-            resolve(client);
+            return resolve(client);
           }).catch((error) => {
-            reject(error);
+            return reject(error);
           });   
         }).catch((error) => {
-          reject(error);
+          return reject(error);
         });
       }).catch((error) => {
-        reject(error);
+        return reject(error)
       }); 
+
+    }); 
+  }
+
+  static putClient(clientObject) {
+    return new Promise((resolve, reject) => {
+
+      /*
+      Client.readDocument().then((clientes) => {
+        var clientExists = false;
+        clientes.forEach(client => {
+          if (client.id == clientObject.id) {
+            clientExists = true;
+            client.id = clientObject.id;
+            client.nome = clientObject.nome;
+            client.endereco = clientObject.endereco;
+            client.cep = clientObject.cep;
+            client.data_de_nascimento = clientObject.data_de_nascimento;
+            client.telefone = clientObject.telefone;
+          }
+        });
+        if (clientExists == true) {
+          var clientsJSON = JSON.stringify(clients);
+          Client.writeDocument(clientsJSON).then(() => {
+            Client.getClient(clientObject.id).then((client) => {
+              return resolve(client);
+            }).catch((error) => {
+              return reject(error);
+            });   
+          }).catch((error) => {
+            return reject(error);
+          });
+        } else {
+          var error = new Error('Cliente não encontrado.')
+          error.status = 404;
+          return reject(error)
+        } 
+      }).catch((error) => {
+        return reject(error);
+      }); 
+      */
     }); 
   }
 
 }
 module.exports = Client; 
 
-/*
-[{"id":1,"nome":"Altrano","endereco":"Rua do Altrano","cep":12345678,"data_de_nascimento":"1995-12-17T03:24:00","telefone":53111122222},{"id":2,"nome":"Beltrano","endereco":"Rua do Beltrano","cep":12345678,"data_de_nascimento":"1995-12-17T03:24:00","telefone":53111122222},{"id":3,"nome":"Ciclano","endereco":"Rua do Ciclano","cep":12345678,"data_de_nascimento":"1995-12-17T03:24:00","telefone":53111122222},{"id":4,"nome":"Deltrano","endereco":"Rua do Deltrano","cep":12345678,"data_de_nascimento":"1995-12-17T03:24:00","telefone":53111122222},{"id":5,"nome":"Feltrano","endereco":"Rua do Feltrano","cep":12345678,"data_de_nascimento":"1995-12-17T03:24:00","telefone":53111122222},{"id":7,"data_de_nascimento":"1995-12-17T03:24:00","telefone":"53111122222"},{"id":9,"endereco":"Rua do Altrano","cep":"12345678","data_de_nascimento":"1995-12-17T03:24:00","telefone":"53111122222"},{"id":10,"nome":"Altrano","endereco":"Rua do Altrano","cep":"12345678","data_de_nascimento":"1995-12-17T03:24:00","telefone":"53111122222"},{"id":11,"nome":"Altrano","endereco":"Rua do Altrano","cep":"12345678","data_de_nascimento":"1995-12-17T03:24:00","telefone":"53111122222"}]
-*/

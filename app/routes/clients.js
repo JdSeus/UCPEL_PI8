@@ -5,5 +5,6 @@ const ClientsController = require('../controllers/clients-controller');
 router.get('/clientes/', ClientsController.getClients);
 router.get('/cliente/:id', ClientsController.getClient);
 router.post('/cliente/', ClientsController.postClient);
+router.put('/cliente/:id', ClientsController.putClient);
 
 module.exports = router;

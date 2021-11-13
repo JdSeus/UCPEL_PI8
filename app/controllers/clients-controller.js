@@ -61,43 +61,32 @@ function constructNotDefinedFieldsMessage(notDefinedFields) {
 }
 
 exports.postClient = (req, res, next) => {
-    
     var notDefinedFields = [];
-
     if (typeof req.body.nome != 'undefined') {
         var nome = req.body.nome;
     } else {
         notDefinedFields.push("nome");
     }
-
-    
     if (typeof req.body.endereco != 'undefined') {
         var endereco = req.body.endereco;
     } else {
         notDefinedFields.push("endereco");
     }
-
-    
     if (typeof req.body.cep != 'undefined') {
         var cep = req.body.cep;
     } else {
         notDefinedFields.push("cep");
     }
-
-    
     if (typeof req.body.data_de_nascimento != 'undefined') {
         var data_de_nascimento = req.body.data_de_nascimento;
     } else {
         notDefinedFields.push("data_de_nascimento");
     }
-
-    
     if (typeof req.body.telefone != 'undefined') {
         var telefone = req.body.telefone;
     } else {
         notDefinedFields.push("telefone");
     }
-
     if (notDefinedFields.length != 0) {
         var message = constructNotDefinedFieldsMessage(notDefinedFields)
         res.status(422).send({
@@ -126,9 +115,57 @@ exports.postClient = (req, res, next) => {
             }
         });
     });   
-    /*
-    Client.getClients().then((clients) => {
-        res.status(200).send(clients);
+};
+
+exports.putClient = (req, res, next) => {
+    const id = req.params.id;
+    var notDefinedFields = [];
+    if (typeof req.body.nome != 'undefined') {
+        var nome = req.body.nome;
+    } else {
+        notDefinedFields.push("nome");
+    }
+    if (typeof req.body.endereco != 'undefined') {
+        var endereco = req.body.endereco;
+    } else {
+        notDefinedFields.push("endereco");
+    }
+    if (typeof req.body.cep != 'undefined') {
+        var cep = req.body.cep;
+    } else {
+        notDefinedFields.push("cep");
+    }
+    if (typeof req.body.data_de_nascimento != 'undefined') {
+        var data_de_nascimento = req.body.data_de_nascimento;
+    } else {
+        notDefinedFields.push("data_de_nascimento");
+    }
+    if (typeof req.body.telefone != 'undefined') {
+        var telefone = req.body.telefone;
+    } else {
+        notDefinedFields.push("telefone");
+    }
+    if (notDefinedFields.length != 0) {
+        var message = constructNotDefinedFieldsMessage(notDefinedFields)
+        res.status(422).send({
+            erro: {
+                status: 422,
+                mensagem: message
+            }
+        });
+    }
+
+    var dataClient = {
+        id: id,
+        nome: nome,
+        endereco: endereco,
+        cep: cep,
+        data_de_nascimento: data_de_nascimento,
+        telefone: telefone,
+    }
+
+    Client.putClient(dataClient).then((client) => {
+        res.status(200).send(client);
     }).catch((error) => {
         res.status(error.status).send({
             erro: {
@@ -136,7 +173,6 @@ exports.postClient = (req, res, next) => {
                 mensagem: error.message
             }
         });
-    });  
-    */  
+    });   
 };
 
