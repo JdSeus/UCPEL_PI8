@@ -167,6 +167,72 @@ exports.putClient = (req, res, next) => {
     });   
 };
 
+exports.patchClient = (req, res, next) => {
+    const id = req.params.id;
+    var hasAtLeastOneField = [];
+    if (typeof req.body.nome != 'undefined') {
+        var nome = req.body.nome;
+        hasAtLeastOneField.push("nome");
+    }
+    if (typeof req.body.endereco != 'undefined') {
+        var endereco = req.body.endereco;
+        hasAtLeastOneField.push("endereco");
+    }
+    if (typeof req.body.cep != 'undefined') {
+        var cep = req.body.cep;
+        hasAtLeastOneField.push("cep");
+    }
+    if (typeof req.body.data_de_nascimento != 'undefined') {
+        var data_de_nascimento = req.body.data_de_nascimento;
+        hasAtLeastOneField.push("data_de_nascimento");
+    }
+    if (typeof req.body.telefone != 'undefined') {
+        var telefone = req.body.telefone;
+        hasAtLeastOneField.push("telefone");
+    }
+
+    if (hasAtLeastOneField.length != 0) {
+        var dataClient = {};
+        if (typeof id != 'undefined') {
+            dataClient.id = id;
+        }
+        if (typeof nome != 'undefined') {
+            dataClient.nome = nome;
+        }
+        if (typeof endereco != 'undefined') {
+            dataClient.endereco = endereco;
+        }
+        if (typeof cep != 'undefined') {
+            dataClient.cep = cep;
+        }
+        if (typeof data_de_nascimento != 'undefined') {
+            dataClient.data_de_nascimento = data_de_nascimento;
+        }
+        if (typeof telefone != 'undefined') {
+            dataClient.telefone = telefone;
+        }
+
+        Client.patchClient(dataClient).then((client) => {
+            res.status(200).send(client);
+        }).catch((error) => {
+            res.status(error.status).send({
+                erro: {
+                    status: error.status,
+                    mensagem: error.message
+                }
+            });
+        });  
+
+    } else {
+        res.status(422).send({
+            erro: {
+                status: 422,
+                mensagem: "Deve ser enviado ao menos um dos campos do cliente para modificação!"
+            }
+        });
+    }
+};
+
 exports.deleteClient = (req, res, next) => {
     const id = req.params.id;
     Client.deleteClient(id).then((result) => {

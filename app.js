@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(routeClients);
 
 app.use((req, res, next) => {
-    const error = new Error('Não encontrado')
+    const error = new Error('Rota não encontrada')
     error.status = 404;
     next(error);
 });

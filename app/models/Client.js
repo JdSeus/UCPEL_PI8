@@ -150,6 +150,57 @@ class Client {
     }); 
   }
 
+  static patchClient(clientObject) {
+    return new Promise((resolve, reject) => {
+
+      Client.getClients().then((clients) => {
+        var clientExists = false;
+        clients.forEach((client) => {
+          if (client.id == clientObject.id) {
+            clientExists = true;
+            if (typeof clientObject.id != 'undefined') {
+              client.id = clientObject.id;
+            }
+            if (typeof clientObject.nome != 'undefined') {
+              client.nome = clientObject.nome;
+            }
+            if (typeof clientObject.endereco != 'undefined') {
+              client.endereco = clientObject.endereco;
+            }
+            if (typeof clientObject.cep != 'undefined') {
+              client.cep = clientObject.cep;
+            }
+            if (typeof clientObject.data_de_nascimento != 'undefined') {
+              client.data_de_nascimento = clientObject.data_de_nascimento;
+            }
+            if (typeof clientObject.telefone != 'undefined') {
+              client.telefone = clientObject.telefone;
+            }
+          }
+        });
+        if (clientExists == true) {
+          var clientsJSON = JSON.stringify(clients);
+          Client.writeDocument(clientsJSON).then(() => {
+            Client.getClient(clientObject.id).then((client) => {
+              return resolve(client);
+            }).catch((error) => {
+              return reject(error);
+            });   
+          }).catch((error) => {
+            return reject(error);
+          });
+        } else {
+          var error = new Error('Cliente não encontrado.')
+          error.status = 404;
+          return reject(error)
+        } 
+      }).catch((error) => {
+        return reject(error)
+      });  
+
+    }); 
+  }
+
   static deleteClient(id) {
     return new Promise((resolve, reject) => {
 
