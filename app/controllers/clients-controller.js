@@ -1,7 +1,5 @@
 const Client = require("../models/Client");
 const { celebrate, Joi, Segments, Modes } = require('celebrate');
-//const { celebrate, Joi, Segments, Modes, isCelebrateError } = require('celebrate');
-//const EscapeHtml  = require('escape-html');
 
 //////////////////////////////////////////////////////////////////////////////
 //FUNÇÕES GERAIS
@@ -24,37 +22,6 @@ const generalValidationMessages = {
     'string.length': `{#label} deve ter um comprimento de {#limit}`,
     'string.pattern.name': `{#label} com valor \"{#value}\" não corresponde ao padrão {#name}.`,
 };
-
-/*
-exports.errors = (opts = {}) => {
-    return (err, req, res, next) => {
-
-      if (!isCelebrateError(err)) {
-        return next(err);
-      }
-  
-  
-      const validation = {};
-      // eslint-disable-next-line no-restricted-syntax
-      for (const [segment, joiError] of err.details.entries()) {
-        validation[segment] = {
-          source: segment,
-          keys: joiError.details.map((detail) => EscapeHtml(detail.path.join('.'))),
-          message: joiError.message,
-        };
-      }
-  
-      const result = {
-        statusCode: 400,
-        error: 400,
-        message: 'A validação falhou.' || err.message,
-        validation,
-      };
-
-      return res.status(400).send(result);
-    };
-  };
-*/
 
 //End FUNÇÕES GERAIS
 //////////////////////////////////////////////////////////////////////////////
