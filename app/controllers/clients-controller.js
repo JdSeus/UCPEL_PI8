@@ -91,13 +91,13 @@ exports.postClientValidation = celebrate({
 );
 exports.postClient = (req, res) => {
 
-    var nome = req.body.nome;
-    var endereco = req.body.endereco;
-    var cep = req.body.cep;
-    var data_de_nascimento = req.body.data_de_nascimento;
-    var telefone = req.body.telefone;
+    const nome = req.body.nome;
+    const endereco = req.body.endereco;
+    const cep = req.body.cep;
+    const data_de_nascimento = req.body.data_de_nascimento;
+    const telefone = req.body.telefone;
 
-    var newCliente = {
+    const newCliente = {
         nome: nome,
         endereco: endereco,
         cep: cep,
@@ -116,40 +116,32 @@ exports.postClient = (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Put Client
+exports.putClientValidation = celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number().integer().required().messages(generalValidationMessages)
+    }),
+    [Segments.BODY]: Joi.object().keys({
+        nome: Joi.string().required().messages(generalValidationMessages),
+        endereco: Joi.string().required().messages(generalValidationMessages),
+        cep: Joi.number().integer().required().messages(generalValidationMessages),
+        data_de_nascimento: Joi.string().required().messages(generalValidationMessages),
+        telefone: Joi.number().integer().required().messages(generalValidationMessages),
+    })
+}, 
+{warnings: true, abortEarly: false}, 
+{mode: 'full'}
+);
 exports.putClient = (req, res) => {
-    const id = req.params.id;
-    var notDefinedFields = [];
-    if (typeof req.body.nome != 'undefined') {
-        var nome = req.body.nome;
-    } else {
-        notDefinedFields.push("nome");
-    }
-    if (typeof req.body.endereco != 'undefined') {
-        var endereco = req.body.endereco;
-    } else {
-        notDefinedFields.push("endereco");
-    }
-    if (typeof req.body.cep != 'undefined') {
-        var cep = req.body.cep;
-    } else {
-        notDefinedFields.push("cep");
-    }
-    if (typeof req.body.data_de_nascimento != 'undefined') {
-        var data_de_nascimento = req.body.data_de_nascimento;
-    } else {
-        notDefinedFields.push("data_de_nascimento");
-    }
-    if (typeof req.body.telefone != 'undefined') {
-        var telefone = req.body.telefone;
-    } else {
-        notDefinedFields.push("telefone");
-    }
-    if (notDefinedFields.length != 0) {
-        var message = constructNotDefinedFieldsMessage(notDefinedFields)
-        res.status(422).send(createErrorMessage(422, message));
-    }
 
-    var dataClient = {
+    const id = req.params.id;
+
+    const nome = req.body.nome;
+    const endereco = req.body.endereco;
+    const cep = req.body.cep;
+    const data_de_nascimento = req.body.data_de_nascimento;
+    const telefone = req.body.telefone;
+
+    const dataClient = {
         id: id,
         nome: nome,
         endereco: endereco,
