@@ -65,7 +65,9 @@ exports.getClientValidation = celebrate({
     })
 });
 exports.getClient = (req, res) => {
+
     const id = req.params.id;
+
     Client.getClient(id).then((client) => {
         res.status(200).send(client);
     }).catch((error) => {
@@ -161,60 +163,56 @@ exports.putClient = (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Patch Client
+exports.patchClientValidation = celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number().integer().required().messages(generalValidationMessages)
+    }),
+    [Segments.BODY]: Joi.object().keys({
+        nome: Joi.string().messages(generalValidationMessages),
+        endereco: Joi.string().messages(generalValidationMessages),
+        cep: Joi.number().integer().messages(generalValidationMessages),
+        data_de_nascimento: Joi.string().messages(generalValidationMessages),
+        telefone: Joi.number().integer().messages(generalValidationMessages),
+    }).min(1).message("Deve ser enviado ao menos um dos campos do cliente para modificação.")
+}, 
+{warnings: true, abortEarly: false}, 
+{mode: 'full'}
+);
 exports.patchClient = (req, res) => {
+
     const id = req.params.id;
-    var hasAtLeastOneField = [];
-    if (typeof req.body.nome != 'undefined') {
-        var nome = req.body.nome;
-        hasAtLeastOneField.push("nome");
+
+    const nome = req.body.nome;
+    const endereco = req.body.endereco;
+    const cep = req.body.cep;
+    const data_de_nascimento = req.body.data_de_nascimento;
+    const telefone = req.body.telefone;
+
+    var dataClient = {};
+    dataClient.id = id;
+
+    if (typeof nome != 'undefined') {
+        dataClient.nome = nome;
     }
-    if (typeof req.body.endereco != 'undefined') {
-        var endereco = req.body.endereco;
-        hasAtLeastOneField.push("endereco");
+    if (typeof endereco != 'undefined') {
+        dataClient.endereco = endereco;
     }
-    if (typeof req.body.cep != 'undefined') {
-        var cep = req.body.cep;
-        hasAtLeastOneField.push("cep");
+    if (typeof cep != 'undefined') {
+        dataClient.cep = cep;
     }
-    if (typeof req.body.data_de_nascimento != 'undefined') {
-        var data_de_nascimento = req.body.data_de_nascimento;
-        hasAtLeastOneField.push("data_de_nascimento");
+    if (typeof data_de_nascimento != 'undefined') {
+        dataClient.data_de_nascimento = data_de_nascimento;
     }
-    if (typeof req.body.telefone != 'undefined') {
-        var telefone = req.body.telefone;
-        hasAtLeastOneField.push("telefone");
+    if (typeof telefone != 'undefined') {
+        dataClient.telefone = telefone;
     }
 
-    if (hasAtLeastOneField.length != 0) {
-        var dataClient = {};
-        if (typeof id != 'undefined') {
-            dataClient.id = id;
-        }
-        if (typeof nome != 'undefined') {
-            dataClient.nome = nome;
-        }
-        if (typeof endereco != 'undefined') {
-            dataClient.endereco = endereco;
-        }
-        if (typeof cep != 'undefined') {
-            dataClient.cep = cep;
-        }
-        if (typeof data_de_nascimento != 'undefined') {
-            dataClient.data_de_nascimento = data_de_nascimento;
-        }
-        if (typeof telefone != 'undefined') {
-            dataClient.telefone = telefone;
-        }
+    Client.patchClient(dataClient).then((client) => {
+        res.status(200).send(client);
+    }).catch((error) => {
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
+    });  
 
-        Client.patchClient(dataClient).then((client) => {
-            res.status(200).send(client);
-        }).catch((error) => {
-            res.status(error.status).send(createErrorMessage(error.status, error.message));
-        });  
-
-    } else {
-        res.status(422).send(createErrorMessage(422, "Deve ser enviado ao menos um dos campos do cliente para modificação!"));
-    }
 };
 //End Patch Client
 //////////////////////////////////////////////////////////////////////////////
