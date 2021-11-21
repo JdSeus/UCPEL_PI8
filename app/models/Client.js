@@ -8,8 +8,15 @@ class Client {
       try {
         var content = fs.readFileSync("./app/models/clientes.json", 'utf8');
         try {
-          var result = JSON.parse(content);
-          return resolve(result);
+          if (content.length == 0) {
+            Client.writeDocument('[]').then(() => {
+              var result = JSON.parse('[]');
+              return resolve(result);
+            })
+          } else {
+            var result = JSON.parse(content);
+            return resolve(result);
+          } 
         } catch (err) {
           var error = new Error('Erro ao converter texto para JSON.')
           error.status = 500;
