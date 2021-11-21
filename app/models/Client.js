@@ -227,7 +227,7 @@ class Client {
   static deleteClient(id) {
     return new Promise((resolve, reject) => {
 
-      Client.getClients().then((clients) => {
+      Client.getClientsRaw().then((clients) => {
         var clientExists = false;
         clients.forEach(client => {
           if (client.id == id) {
