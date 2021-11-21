@@ -250,10 +250,6 @@ class Client {
               client.cep = undefined;
               client.data_de_nascimento = undefined;
               client.telefone = undefined;
-            } else {
-              var error = new Error('Cliente não encontrado.')
-              error.status = 404;
-              return reject(error);
             }
           }
         });
