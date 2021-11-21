@@ -35,11 +35,16 @@ function createErrorMessage(status, message) {
     }
 }
 
+
+
 const generalValidationMessages = {
-    'number.base': `O valor de {#label} não é um número e não pode ser convertido para numero.`,
-    'string.base': `O valor de {#label} não é uma string.`,
-    'number.integer': `o valor de {#label} não era um inteiro valido.`,
     'any.required': `O campo {#label} é necessário.`,
+    'date.format': `{#label} deve estar no padrão de data ISO 8601.`,
+    'number.base': `O valor de {#label} não é um número e não pode ser convertido para numero.`,
+    'number.integer': `o valor de {#label} não era um inteiro valido.`,
+    'string.base': `O valor de {#label} não é uma string.`,
+    'string.length': `{#label} deve ter um comprimento de {#limit}.`,
+    'string.pattern.name': `{#label} com valor \"{#value}\" não corresponde ao padrão {#name}.`,
 };
 
 //End FUNÇÕES GERAIS
@@ -83,8 +88,8 @@ exports.postClientValidation = celebrate({
         [Segments.BODY]: Joi.object().keys({
             nome: Joi.string().required().messages(generalValidationMessages),
             endereco: Joi.string().required().messages(generalValidationMessages),
-            cep: Joi.number().integer().required().messages(generalValidationMessages),
-            data_de_nascimento: Joi.string().required().messages(generalValidationMessages),
+            cep: Joi.string().length(8).pattern(/^[0-9]+$/, 'CEP').required().messages(generalValidationMessages),
+            data_de_nascimento: Joi.date().iso().required().messages(generalValidationMessages),
             telefone: Joi.number().integer().required().messages(generalValidationMessages),
         })
     }, 
@@ -125,8 +130,8 @@ exports.putClientValidation = celebrate({
     [Segments.BODY]: Joi.object().keys({
         nome: Joi.string().required().messages(generalValidationMessages),
         endereco: Joi.string().required().messages(generalValidationMessages),
-        cep: Joi.number().integer().required().messages(generalValidationMessages),
-        data_de_nascimento: Joi.string().required().messages(generalValidationMessages),
+        cep: Joi.string().length(8).pattern(/^[0-9]+$/, 'CEP').required().messages(generalValidationMessages),
+        data_de_nascimento: Joi.date().iso().required().messages(generalValidationMessages),
         telefone: Joi.number().integer().required().messages(generalValidationMessages),
     })
 }, 
@@ -170,8 +175,8 @@ exports.patchClientValidation = celebrate({
     [Segments.BODY]: Joi.object().keys({
         nome: Joi.string().messages(generalValidationMessages),
         endereco: Joi.string().messages(generalValidationMessages),
-        cep: Joi.number().integer().messages(generalValidationMessages),
-        data_de_nascimento: Joi.string().messages(generalValidationMessages),
+        cep: Joi.string().length(8).pattern(/^[0-9]+$/, 'CEP').required().messages(generalValidationMessages),
+        data_de_nascimento: Joi.date().iso().messages(generalValidationMessages),
         telefone: Joi.number().integer().messages(generalValidationMessages),
     }).min(1).message("Deve ser enviado ao menos um dos campos do cliente para modificação.")
 }, 
