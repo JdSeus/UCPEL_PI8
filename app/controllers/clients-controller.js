@@ -219,6 +219,11 @@ exports.patchClient = (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Delete Client
+exports.deleteClientValidation = celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number().integer().required().messages(generalValidationMessages)
+    })
+});
 exports.deleteClient = (req, res) => {
     const id = req.params.id;
     Client.deleteClient(id).then((result) => {

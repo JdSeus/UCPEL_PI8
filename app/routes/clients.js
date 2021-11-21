@@ -9,7 +9,7 @@ router.get('/cliente/:id', ClientsController.getClientValidation, ClientsControl
 router.post('/cliente/', ClientsController.postClientValidation, ClientsController.postClient);
 router.put('/cliente/:id', ClientsController.putClientValidation, ClientsController.putClient);
 router.patch('/cliente/:id',ClientsController.patchClientValidation,  ClientsController.patchClient);
-router.delete('/cliente/:id', ClientsController.deleteClient);
+router.delete('/cliente/:id', ClientsController.deleteClientValidation, ClientsController.deleteClient);
 
 router.use(errors({statusCode: 400, message: "A validação falhou."}));
 
