@@ -1,7 +1,7 @@
 const Client = require("../models/Client");
+const { celebrate, Joi, errors, Segments } = require('celebrate');
 
 function constructNotDefinedFieldsMessage(notDefinedFields) {
-
     if (notDefinedFields.length != 0) {
         if (notDefinedFields.length == 1) {
             var string = `O campo ${notDefinedFields[0]} não está definido!`;
@@ -24,30 +24,39 @@ function constructNotDefinedFieldsMessage(notDefinedFields) {
     return 'Sem erros.';
 }
 
+function createErrorMessage(status, message) {
+    return {
+        erro: {
+            status: status,
+            mensagem: message
+        }
+    }
+}
+
 exports.getClients = (req, res, next) => {
     Client.getClients().then((clients) => {
         res.status(200).send(clients);
     }).catch((error) => {
-        res.status(error.status).send({
-            erro: {
-                status: error.status,
-                mensagem: error.message
-            }
-        });
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
     });    
 };
 
+const getClientMessages = {
+    'number.base': 'O valor de id não é um número e não pode ser transformado para numero!',
+    'number.integer': 'o valor de id não era um inteiro valido!',
+    'any.required': 'O campo id é necessário!',
+};
+exports.getClientValidation = celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number().integer().required().messages(getClientMessages)
+    })
+});
 exports.getClient = (req, res, next) => {
     const id = req.params.id;
     Client.getClient(id).then((client) => {
         res.status(200).send(client);
     }).catch((error) => {
-        res.status(error.status).send({
-            erro: {
-                status: error.status,
-                mensagem: error.message
-            }
-        });
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
 
@@ -80,12 +89,7 @@ exports.postClient = (req, res, next) => {
     }
     if (notDefinedFields.length != 0) {
         var message = constructNotDefinedFieldsMessage(notDefinedFields)
-        res.status(422).send({
-            erro: {
-                status: 422,
-                mensagem: message
-            }
-        });
+        res.status(422).send(createErrorMessage(422, message));
     }
 
     var newCliente = {
@@ -99,12 +103,7 @@ exports.postClient = (req, res, next) => {
     Client.postClient(newCliente).then((client) => {
         res.status(200).send(client);
     }).catch((error) => {
-        res.status(error.status).send({
-            erro: {
-                status: error.status,
-                mensagem: error.message
-            }
-        });
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
 
@@ -138,12 +137,7 @@ exports.putClient = (req, res, next) => {
     }
     if (notDefinedFields.length != 0) {
         var message = constructNotDefinedFieldsMessage(notDefinedFields)
-        res.status(422).send({
-            erro: {
-                status: 422,
-                mensagem: message
-            }
-        });
+        res.status(422).send(createErrorMessage(422, message));
     }
 
     var dataClient = {
@@ -158,12 +152,7 @@ exports.putClient = (req, res, next) => {
     Client.putClient(dataClient).then((client) => {
         res.status(200).send(client);
     }).catch((error) => {
-        res.status(error.status).send({
-            erro: {
-                status: error.status,
-                mensagem: error.message
-            }
-        });
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
 
@@ -215,21 +204,11 @@ exports.patchClient = (req, res, next) => {
         Client.patchClient(dataClient).then((client) => {
             res.status(200).send(client);
         }).catch((error) => {
-            res.status(error.status).send({
-                erro: {
-                    status: error.status,
-                    mensagem: error.message
-                }
-            });
+            res.status(error.status).send(createErrorMessage(error.status, error.message));
         });  
 
     } else {
-        res.status(422).send({
-            erro: {
-                status: 422,
-                mensagem: "Deve ser enviado ao menos um dos campos do cliente para modificação!"
-            }
-        });
+        res.status(422).send(createErrorMessage(422, "Deve ser enviado ao menos um dos campos do cliente para modificação!"));
     }
 };
 
@@ -238,11 +217,6 @@ exports.deleteClient = (req, res, next) => {
     Client.deleteClient(id).then((result) => {
         res.status(200).send(result);
     }).catch((error) => {
-        res.status(error.status).send({
-            erro: {
-                status: error.status,
-                mensagem: error.message
-            }
-        });
+        res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
