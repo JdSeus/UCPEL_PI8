@@ -137,17 +137,19 @@ class Client {
   static putClient(clientObject) {
     return new Promise((resolve, reject) => {
 
-      Client.getClients().then((clients) => {
+      Client.getClientsRaw().then((clients) => {
         var clientExists = false;
         clients.forEach((client) => {
-          if (client.id == clientObject.id) {
-            clientExists = true;
-            client.id = clientObject.id;
-            client.nome = clientObject.nome;
-            client.endereco = clientObject.endereco;
-            client.cep = clientObject.cep;
-            client.data_de_nascimento = clientObject.data_de_nascimento;
-            client.telefone = clientObject.telefone;
+          if (Object.keys(client).length > 1) {
+            if (client.id == clientObject.id) {
+              clientExists = true;
+              client.id = clientObject.id;
+              client.nome = clientObject.nome;
+              client.endereco = clientObject.endereco;
+              client.cep = clientObject.cep;
+              client.data_de_nascimento = clientObject.data_de_nascimento;
+              client.telefone = clientObject.telefone;
+            }
           }
         });
         if (clientExists == true) {
@@ -172,32 +174,35 @@ class Client {
 
     }); 
   }
+  
 
   static patchClient(clientObject) {
     return new Promise((resolve, reject) => {
 
-      Client.getClients().then((clients) => {
+      Client.getClientsRaw().then((clients) => {
         var clientExists = false;
         clients.forEach((client) => {
-          if (client.id == clientObject.id) {
-            clientExists = true;
-            if (typeof clientObject.id != 'undefined') {
-              client.id = clientObject.id;
-            }
-            if (typeof clientObject.nome != 'undefined') {
-              client.nome = clientObject.nome;
-            }
-            if (typeof clientObject.endereco != 'undefined') {
-              client.endereco = clientObject.endereco;
-            }
-            if (typeof clientObject.cep != 'undefined') {
-              client.cep = clientObject.cep;
-            }
-            if (typeof clientObject.data_de_nascimento != 'undefined') {
-              client.data_de_nascimento = clientObject.data_de_nascimento;
-            }
-            if (typeof clientObject.telefone != 'undefined') {
-              client.telefone = clientObject.telefone;
+          if (Object.keys(client).length > 1) {
+            if (client.id == clientObject.id) {
+              clientExists = true;
+              if (typeof clientObject.id != 'undefined') {
+                client.id = clientObject.id;
+              }
+              if (typeof clientObject.nome != 'undefined') {
+                client.nome = clientObject.nome;
+              }
+              if (typeof clientObject.endereco != 'undefined') {
+                client.endereco = clientObject.endereco;
+              }
+              if (typeof clientObject.cep != 'undefined') {
+                client.cep = clientObject.cep;
+              }
+              if (typeof clientObject.data_de_nascimento != 'undefined') {
+                client.data_de_nascimento = clientObject.data_de_nascimento;
+              }
+              if (typeof clientObject.telefone != 'undefined') {
+                client.telefone = clientObject.telefone;
+              }
             }
           }
         });
@@ -230,8 +235,8 @@ class Client {
       Client.getClientsRaw().then((clients) => {
         var clientExists = false;
         clients.forEach(client => {
-          if (client.id == id) {
-            if (Object.keys(client).length > 1) {
+          if (Object.keys(client).length > 1) {
+            if (client.id == id) {
               clientExists = true;
               client.nome = undefined;
               client.endereco = undefined;
