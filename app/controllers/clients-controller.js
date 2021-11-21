@@ -1,6 +1,5 @@
 const Client = require("../models/Client");
-const { celebrate, Joi, errors, Segments } = require('celebrate');
-
+const { celebrate, Joi, Segments, Modes } = require('celebrate');
 
 //////////////////////////////////////////////////////////////////////////////
 //FUNÇÕES GERAIS
@@ -36,12 +35,19 @@ function createErrorMessage(status, message) {
     }
 }
 
+const generalValidationMessages = {
+    'number.base': `O valor de {#label} não é um número e não pode ser convertido para numero.`,
+    'string.base': `O valor de {#label} não é uma string.`,
+    'number.integer': `o valor de {#label} não era um inteiro valido.`,
+    'any.required': `O campo {#label} é necessário.`,
+};
+
 //End FUNÇÕES GERAIS
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
 //Get Clients
-exports.getClients = (req, res, next) => {
+exports.getClients = (req, res) => {
     Client.getClients().then((clients) => {
         res.status(200).send(clients);
     }).catch((error) => {
@@ -53,17 +59,12 @@ exports.getClients = (req, res, next) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Get Client
-const getClientMessages = {
-    'number.base': 'O valor de id não é um número e não pode ser convertido para numero.',
-    'number.integer': 'o valor de id não era um inteiro valido.',
-    'any.required': 'O campo id é necessário.',
-};
 exports.getClientValidation = celebrate({
     [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number().integer().required().messages(getClientMessages)
+        id: Joi.number().integer().required().messages(generalValidationMessages)
     })
 });
-exports.getClient = (req, res, next) => {
+exports.getClient = (req, res) => {
     const id = req.params.id;
     Client.getClient(id).then((client) => {
         res.status(200).send(client);
@@ -76,37 +77,25 @@ exports.getClient = (req, res, next) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Post Client
-exports.postClient = (req, res, next) => {
-    var notDefinedFields = [];
-    if (typeof req.body.nome != 'undefined') {
-        var nome = req.body.nome;
-    } else {
-        notDefinedFields.push("nome");
-    }
-    if (typeof req.body.endereco != 'undefined') {
-        var endereco = req.body.endereco;
-    } else {
-        notDefinedFields.push("endereco");
-    }
-    if (typeof req.body.cep != 'undefined') {
-        var cep = req.body.cep;
-    } else {
-        notDefinedFields.push("cep");
-    }
-    if (typeof req.body.data_de_nascimento != 'undefined') {
-        var data_de_nascimento = req.body.data_de_nascimento;
-    } else {
-        notDefinedFields.push("data_de_nascimento");
-    }
-    if (typeof req.body.telefone != 'undefined') {
-        var telefone = req.body.telefone;
-    } else {
-        notDefinedFields.push("telefone");
-    }
-    if (notDefinedFields.length != 0) {
-        var message = constructNotDefinedFieldsMessage(notDefinedFields)
-        res.status(422).send(createErrorMessage(422, message));
-    }
+exports.postClientValidation = celebrate({
+        [Segments.BODY]: Joi.object().keys({
+            nome: Joi.string().required().messages(generalValidationMessages),
+            endereco: Joi.string().required().messages(generalValidationMessages),
+            cep: Joi.number().integer().required().messages(generalValidationMessages),
+            data_de_nascimento: Joi.string().required().messages(generalValidationMessages),
+            telefone: Joi.number().integer().required().messages(generalValidationMessages),
+        })
+    }, 
+    {warnings: true, abortEarly: false}, 
+    {mode: 'full'}
+);
+exports.postClient = (req, res) => {
+
+    var nome = req.body.nome;
+    var endereco = req.body.endereco;
+    var cep = req.body.cep;
+    var data_de_nascimento = req.body.data_de_nascimento;
+    var telefone = req.body.telefone;
 
     var newCliente = {
         nome: nome,
@@ -127,7 +116,7 @@ exports.postClient = (req, res, next) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Put Client
-exports.putClient = (req, res, next) => {
+exports.putClient = (req, res) => {
     const id = req.params.id;
     var notDefinedFields = [];
     if (typeof req.body.nome != 'undefined') {
@@ -180,7 +169,7 @@ exports.putClient = (req, res, next) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Patch Client
-exports.patchClient = (req, res, next) => {
+exports.patchClient = (req, res) => {
     const id = req.params.id;
     var hasAtLeastOneField = [];
     if (typeof req.body.nome != 'undefined') {
@@ -240,7 +229,7 @@ exports.patchClient = (req, res, next) => {
 
 //////////////////////////////////////////////////////////////////////////////
 //Delete Client
-exports.deleteClient = (req, res, next) => {
+exports.deleteClient = (req, res) => {
     const id = req.params.id;
     Client.deleteClient(id).then((result) => {
         res.status(200).send(result);
