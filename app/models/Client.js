@@ -44,11 +44,15 @@ class Client {
 
       Client.readDocument().then((clientsRaw) => {
         var clients = []
-        clientsRaw.forEach(client => {
-          if (Object.keys(client).length > 1) {
-            clients.push(client);
-          }
-        });
+        if (clientsRaw.length > 0) {
+          clientsRaw.forEach(client => {
+            if (Object.keys(client).length > 1) {
+              clients.push(client);
+            }
+          });
+        } else {
+          clients = clientsRaw;
+        }
         return resolve(clients);
       }).catch((error) => {
         return reject(error);
