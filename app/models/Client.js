@@ -42,7 +42,13 @@ class Client {
   static getClients() {
     return new Promise((resolve, reject) => {
 
-      Client.readDocument().then((clients) => {
+      Client.readDocument().then((clientsRaw) => {
+        var clients = []
+        clientsRaw.forEach(client => {
+          if (Object.keys(client).length > 1) {
+            clients.push(client);
+          }
+        });
         return resolve(clients);
       }).catch((error) => {
         return reject(error);
