@@ -1,8 +1,11 @@
 const Client = require("../models/Client");
 const { celebrate, Joi, Segments, Modes } = require('celebrate');
+//const { celebrate, Joi, Segments, Modes, isCelebrateError } = require('celebrate');
+//const EscapeHtml  = require('escape-html');
 
 //////////////////////////////////////////////////////////////////////////////
 //FUNÇÕES GERAIS
+
 function createErrorMessage(status, message) {
     return {
         erro: {
@@ -16,11 +19,42 @@ const generalValidationMessages = {
     'any.required': `O campo {#label} é necessário.`,
     'date.format': `{#label} deve estar no padrão de data ISO 8601.`,
     'number.base': `O valor de {#label} não é um número.`,
-    'number.integer': `o valor de {#label} não era um inteiro válido.`,
+    'number.integer': `O valor de {#label} não era um inteiro válido.`,
     'string.base': `O valor de {#label} não é uma string.`,
-    'string.length': `{#label} deve ter um comprimento de {#limit}.`,
+    'string.length': `{#label} deve ter um comprimento de {#limit}`,
     'string.pattern.name': `{#label} com valor \"{#value}\" não corresponde ao padrão {#name}.`,
 };
+
+/*
+exports.errors = (opts = {}) => {
+    return (err, req, res, next) => {
+
+      if (!isCelebrateError(err)) {
+        return next(err);
+      }
+  
+  
+      const validation = {};
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [segment, joiError] of err.details.entries()) {
+        validation[segment] = {
+          source: segment,
+          keys: joiError.details.map((detail) => EscapeHtml(detail.path.join('.'))),
+          message: joiError.message,
+        };
+      }
+  
+      const result = {
+        statusCode: 400,
+        error: 400,
+        message: 'A validação falhou.' || err.message,
+        validation,
+      };
+
+      return res.status(400).send(result);
+    };
+  };
+*/
 
 //End FUNÇÕES GERAIS
 //////////////////////////////////////////////////////////////////////////////
@@ -75,7 +109,7 @@ exports.postClient = [
             })
         }, 
         {warnings: true, abortEarly: false}, 
-        {mode: 'full'}
+        {mode: Modes.FULL}
     ),
     (req, res) => {
 
@@ -120,7 +154,7 @@ exports.putClient = [
             })
         }, 
         {warnings: true, abortEarly: false}, 
-        {mode: 'full'}
+        {mode: Modes.FULL}
     ),
     (req, res) => {
 
@@ -168,7 +202,7 @@ exports.patchClient = [
             }).min(1).message("Deve ser enviado ao menos um dos campos do cliente para modificação.")
         }, 
         {warnings: true, abortEarly: false}, 
-        {mode: 'full'}
+        {mode: Modes.FULL}
     ),
     (req, res) => {
 
@@ -211,11 +245,6 @@ exports.patchClient = [
 
 //////////////////////////////////////////////////////////////////////////////
 //Delete Client
-exports.deleteClientValidation = celebrate({
-    [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number().integer().required().messages(generalValidationMessages)
-    })
-});
 exports.deleteClient = [
     celebrate(
         {
