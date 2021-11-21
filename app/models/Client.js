@@ -61,6 +61,19 @@ class Client {
     }); 
   }
 
+  static getClientsRaw() {
+    return new Promise((resolve, reject) => {
+
+      Client.readDocument().then((clients) => {
+        return resolve(clients);
+      }).catch((error) => {
+        return reject(error);
+      }); 
+
+    }); 
+  }
+
+
   static getClient(id) {
     return new Promise((resolve, reject) => {
 
@@ -89,7 +102,7 @@ class Client {
   static postClient(clientObject) {
     return new Promise((resolve, reject) => {
 
-      Client.getClients().then((clients) => {
+      Client.getClientsRaw().then((clients) => {
         if (clients.length > 0) {
           var lastId = clients[clients.length-1].id;
         } else {
