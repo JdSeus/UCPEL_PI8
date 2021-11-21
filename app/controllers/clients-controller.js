@@ -1,6 +1,9 @@
 const Client = require("../models/Client");
 const { celebrate, Joi, errors, Segments } = require('celebrate');
 
+
+//////////////////////////////////////////////////////////////////////////////
+//FUNÇÕES GERAIS
 function constructNotDefinedFieldsMessage(notDefinedFields) {
     if (notDefinedFields.length != 0) {
         if (notDefinedFields.length == 1) {
@@ -33,6 +36,11 @@ function createErrorMessage(status, message) {
     }
 }
 
+//End FUNÇÕES GERAIS
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+//Get Clients
 exports.getClients = (req, res, next) => {
     Client.getClients().then((clients) => {
         res.status(200).send(clients);
@@ -40,11 +48,15 @@ exports.getClients = (req, res, next) => {
         res.status(error.status).send(createErrorMessage(error.status, error.message));
     });    
 };
+//End Get Clients
+//////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+//Get Client
 const getClientMessages = {
-    'number.base': 'O valor de id não é um número e não pode ser transformado para numero!',
-    'number.integer': 'o valor de id não era um inteiro valido!',
-    'any.required': 'O campo id é necessário!',
+    'number.base': 'O valor de id não é um número e não pode ser convertido para numero.',
+    'number.integer': 'o valor de id não era um inteiro valido.',
+    'any.required': 'O campo id é necessário.',
 };
 exports.getClientValidation = celebrate({
     [Segments.PARAMS]: Joi.object().keys({
@@ -59,7 +71,11 @@ exports.getClient = (req, res, next) => {
         res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
+//End Get Client
+//////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+//Post Client
 exports.postClient = (req, res, next) => {
     var notDefinedFields = [];
     if (typeof req.body.nome != 'undefined') {
@@ -106,7 +122,11 @@ exports.postClient = (req, res, next) => {
         res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
+//End Post Client
+//////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+//Put Client
 exports.putClient = (req, res, next) => {
     const id = req.params.id;
     var notDefinedFields = [];
@@ -155,7 +175,11 @@ exports.putClient = (req, res, next) => {
         res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
+//End Put Client
+//////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+//Patch Client
 exports.patchClient = (req, res, next) => {
     const id = req.params.id;
     var hasAtLeastOneField = [];
@@ -211,7 +235,11 @@ exports.patchClient = (req, res, next) => {
         res.status(422).send(createErrorMessage(422, "Deve ser enviado ao menos um dos campos do cliente para modificação!"));
     }
 };
+//End Patch Client
+//////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+//Delete Client
 exports.deleteClient = (req, res, next) => {
     const id = req.params.id;
     Client.deleteClient(id).then((result) => {
@@ -220,3 +248,5 @@ exports.deleteClient = (req, res, next) => {
         res.status(error.status).send(createErrorMessage(error.status, error.message));
     });   
 };
+//End Delete Client
+//////////////////////////////////////////////////////////////////////////////

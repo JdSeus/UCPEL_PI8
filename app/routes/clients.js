@@ -11,6 +11,6 @@ router.put('/cliente/:id', ClientsController.putClient);
 router.patch('/cliente/:id', ClientsController.patchClient);
 router.delete('/cliente/:id', ClientsController.deleteClient);
 
-router.use(errors());
+router.use(errors({statusCode: 400, message: "A validação falhou."}));
 
 module.exports = router;
