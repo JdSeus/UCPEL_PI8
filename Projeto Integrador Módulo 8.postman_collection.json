@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "f0ca3380-647a-4d9c-9a5b-93b388b38b94",
+		"name": "Projeto Integrador Módulo 8",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Clientes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/clientes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/cliente/2",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cliente",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Cliente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "aaa",
+						"value": "111111",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nome",
+							"value": "Eltrano",
+							"type": "text"
+						},
+						{
+							"key": "endereco",
+							"value": "Rua do Eltrano",
+							"type": "text"
+						},
+						{
+							"key": "cep",
+							"value": "12345678",
+							"type": "text"
+						},
+						{
+							"key": "data_de_nascimento",
+							"value": "1995-12-17T03:24:00",
+							"type": "text"
+						},
+						{
+							"key": "telefone",
+							"value": "53111122222",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/cliente",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cliente"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Cliente",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "aaa",
+						"value": "111111",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nome",
+							"value": "Beltrano",
+							"type": "text"
+						},
+						{
+							"key": "endereco",
+							"value": "Rua do Celtrano",
+							"type": "text"
+						},
+						{
+							"key": "cep",
+							"value": "12345678",
+							"type": "text"
+						},
+						{
+							"key": "data_de_nascimento",
+							"value": "1995-12-17T03:24:00",
+							"type": "text"
+						},
+						{
+							"key": "telefone",
+							"value": "53111122222",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/cliente/1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cliente",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch Cliente",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "aaa",
+						"value": "111111",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nome",
+							"value": "Altrano",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "endereco",
+							"value": "Rua do Beltrano",
+							"type": "text"
+						},
+						{
+							"key": "cep",
+							"value": "12345678",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "data_de_nascimento",
+							"value": "1995-12-17T03:24:00",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "telefone",
+							"value": "53111122222",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/cliente/1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cliente",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Cliente",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/cliente/6",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cliente",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:8000"
+		}
+	]
+}

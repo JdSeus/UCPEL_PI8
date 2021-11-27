@@ -1,0 +1,2 @@
+Deve ser executado o comando:
+node server.js
